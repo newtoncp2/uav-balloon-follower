@@ -44,9 +44,9 @@ class BalloonDetector:
         return mask
 
     def _find_contours(self, mask):
-            # Identify all red objects contours, considers only 'external' contours
-            contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-            return list(contours)
+        # Identifies all red objects contours, considers only 'external' contours
+        contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        return list(contours)
 
     def _filter_candidates(self, contours):
         # Logic to choose wich objects are considered valid 
