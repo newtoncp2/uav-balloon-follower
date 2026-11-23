@@ -1,16 +1,21 @@
 import time
 from pathlib import Path
 
-from camera import Camera
+from camera import  create_camera
 from balloon_detector import BalloonDetector
 from hud import draw_hud
 from streaming import MjpegStreamer
 
-# O vídeo está na mesma pasta dos módulos de visão
 VIDEO_PATH = Path(__file__).resolve().parent / "teste.mp4"
 
-LOOP = True           # vídeo recomeça quando acaba
-PACE = True           # entrega os frames no ritmo do vídeo (como uma câmera)
+# No computador, com vídeo
+CAMERA_MODE = "opencv"
+CAMERA_ARGS = {"source": str(VIDEO_PATH), "loop": True, "pace": True}
+
+# No drone:
+# CAMERA_MODE = "rpicam"
+# CAMERA_ARGS = {"width": 1280, "height": 720}
+
 HOST = "0.0.0.0"      # no WSL, garante que o Windows consiga acessar
 PORT = 8080
 
@@ -33,7 +38,7 @@ def main():
     if not VIDEO_PATH.exists():
         raise SystemExit(f"Vídeo não encontrado: {VIDEO_PATH}")
 
-    cam = Camera(str(VIDEO_PATH), loop=LOOP, pace=PACE)
+    cam = create_camera(CAMERA_MODE, **CAMERA_ARGS)
     detector = BalloonDetector()
     streamer = MjpegStreamer(host=HOST, port=PORT)
 
